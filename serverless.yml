@@ -1,0 +1,68 @@
+service: aws-custom-authorizer${env:developerStack, ''}
+
+configValidationMode: off
+frameworkVersion: '>=3'
+
+custom:
+  stackPrefix: ${self:service}-${self:provider.stage}
+
+  # Prune
+  prune:
+    automatic: true
+    prod: 3
+    staging: 2
+    develop: 1
+    number: 1
+
+  # developDomain: e1-api-protoprime.click
+  # prodDomain: api-protoprime.click
+
+  # customDomain:
+  #   domainName: ${self:custom.${self:provider.stage, 'develop'}Domain}
+  #   basePath: users-ms${env:developerStack, ''}
+  #   endpointType: 'regional'
+  #   apiType: http
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  architecture: arm64
+  region: ${opt:region, 'us-east-1'}
+  accountId: !Ref AWS::AccountId
+  stage: ${opt:stage, 'develop'}
+  tracing:
+    lambda: true
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - 'xray:PutTraceSegments'
+            - 'xray:PutTelemetryRecords'
+          Resource: '*'
+  environment:
+    SERVICE: ${self:service}
+    REGION: ${self:provider.region}
+    ACCOUNT_ID: ${self:provider.accountId}
+    LOG_LEVEL: DEBUG
+    OWNER_PROJECT_NAME: 'Protoprime'
+
+package:
+  individually: false
+  excludeDevDependencies: true
+  patterns:
+    - '!node_modules/**'
+  exclude:
+    - node_modules/**
+
+plugins:
+  - serverless-iam-roles-per-function
+  - serverless-prune-plugin
+  - serverless-webpack
+
+resources:
+  - ${file(resources/outputs/outputs.yml)}
+  # - ${file(resources/authorizer/authorizer.yml)}
+
+functions:
+  - ${file(src/authorizer.yml)}

@@ -1,0 +1,6 @@
+Outputs:
+  AuthorizerRef:
+    Description: "Authorizer reference"
+    Value: !GetAtt AuthorizerLambdaFunction.Arn
+    Export:
+      Name: !Sub "${self:custom.stackPrefix}-authorizer-ref"

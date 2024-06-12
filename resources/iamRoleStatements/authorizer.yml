@@ -1,0 +1,5 @@
+- Effect: Allow
+  Action:
+    - dynamodb:Query
+  Resource:
+    - !Sub arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${file(resources/index.json):tables.clientsScopesTable}

@@ -1,0 +1,5 @@
+{
+    "functions": {
+        "authorizer": "${self:custom.stackPrefix}-authorizer"
+    }
+}
