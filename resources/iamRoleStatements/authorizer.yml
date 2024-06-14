@@ -1,5 +1,5 @@
 - Effect: Allow
   Action:
-    - dynamodb:Query
+    - lambda:InvokeFunction
   Resource:
-    - !Sub arn:${AWS::Partition}:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${file(resources/index.json):tables.clientsScopesTable}
+    - !Sub arn:aws:lambda:us-east-1:066342185209:function:aws-token-security-develop-validateScope

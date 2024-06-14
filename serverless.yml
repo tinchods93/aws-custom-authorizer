@@ -6,6 +6,8 @@ frameworkVersion: '>=3'
 custom:
   stackPrefix: ${self:service}-${self:provider.stage}
 
+  tokenSecurityPrefix: aws-token-security-${self:provider.stage}
+
   # Prune
   prune:
     automatic: true
@@ -45,6 +47,7 @@ provider:
     REGION: ${self:provider.region}
     ACCOUNT_ID: ${self:provider.accountId}
     LOG_LEVEL: DEBUG
+    JWT_SECRET: 'test-secret'
     OWNER_PROJECT_NAME: 'Protoprime'
 
 package:

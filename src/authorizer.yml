@@ -1,7 +1,10 @@
 authorizer:
-  handler: src/infrastructure/primary/handlers/authorizer/authorizer.handler
+  handler: src/handlers/authorizer.handler
   description: 'Custom Api Gateway Authorizer for Lambda functions'
   name: ${file(resources/index.json):functions.authorizer}
   timeout: 25
   iamRoleStatementsInherit: true
+  iamRoleStatements: ${file(resources/iamRoleStatements/authorizer.yml)}
   provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, 0}
+  environment:
+    VALIDATE_SCOPE_FUNCTION_NAME: ${file(resources/index.json):externalFunctions.validateScope}

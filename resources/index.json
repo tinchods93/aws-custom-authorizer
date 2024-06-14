@@ -1,5 +1,8 @@
 {
     "functions": {
         "authorizer": "${self:custom.stackPrefix}-authorizer"
+    },
+    "externalFunctions":{
+        "validateScope": "${self:custom.tokenSecurityPrefix}-validateScope"
     }
 }
