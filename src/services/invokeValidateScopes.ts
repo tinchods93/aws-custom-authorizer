@@ -17,7 +17,6 @@ const invokeValidateScopes = async (
     },
     {}
   ).catch((e) => {
-    console.log('MARTIN_LOG=> invoke error', e);
     return false;
   });
 

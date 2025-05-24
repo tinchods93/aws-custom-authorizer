@@ -25,11 +25,11 @@ async function authorizerDomain(event, callback) {
     }
 
     // return the response
-    return Policy.getPolicy(PolicyEffectEnum.Allow);
+    return Policy.getPolicy(PolicyEffectEnum.ALLOW);
   } catch (error) {
     callback('Unauthorized');
   }
-  return Policy.getPolicy(PolicyEffectEnum.Deny);
+  return Policy.getPolicy(PolicyEffectEnum.DENY);
 }
 
 export default authorizerDomain;

@@ -1,40 +1,60 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import moment from 'moment-timezone';
 import jwt from 'jsonwebtoken';
-import validateScopes from './validateScopes';
+import jwksClient from 'jwks-rsa';
+import util from 'util';
 
 // Esta función decodifica el token
 function decodeToken(token: string) {
-  try {
-    const currentTime = moment().tz('America/Argentina/Buenos_Aires').unix(); // UTC-3 timezone
-    return jwt.verify(token, process.env.JWT_SECRET as string, {
-      clockTimestamp: currentTime,
-    }) as {
-      client: { scopes: string };
-    };
-  } catch (error) {
-    console.log('MARTIN_LOG=> error', JSON.stringify(error));
-    throw new Error('Error al decodificar el token');
+  const decoded = jwt.decode(token, { complete: true });
+  if (!decoded || !decoded.header || !decoded.header.kid) {
+    throw new Error('invalid token');
   }
+
+  return decoded;
 }
 
 // Esta función valida los scopes de un token
 export default async function validateToken(
   token: string,
   methodArn: string
-): Promise<boolean> {
-  // Si el token no es proporcionado, retorna falso
+): Promise<
+  | {
+      principalId: string;
+      policyDocument: object;
+      context: { scope: string };
+    }
+  | false
+> {
   if (!token || !methodArn) {
     return false;
   }
 
-  // Decodifica el token para obtener su payload
+  const client = jwksClient({
+    jwksUri: process.env.JWKS_URI as string,
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 10,
+  });
+
   const decodedToken = decodeToken(token);
 
-  // Verifica si los scopes del token incluyen los scopes requeridos, y retorna el resultado
-  const response = await validateScopes(
-    decodedToken?.client?.scopes,
-    methodArn
-  );
-  return response;
+  const getSigningKey = util.promisify(client.getSigningKey);
+  const jwtOptions = {}; // Ajusta según tus necesidades
+
+  try {
+    const key = await getSigningKey(decodedToken.header.kid);
+    if (!key) {
+      throw new Error('Signing key not found');
+    }
+    // Verifica el token usando la clave pública
+    const signingKey = key?.getPublicKey();
+
+    if (!signingKey) {
+      throw new Error('Public key not found');
+    }
+
+    const decoded = jwt.verify(token, signingKey, jwtOptions) as any;
+    return decoded && true;
+  } catch (err) {
+    return false;
+  }
 }

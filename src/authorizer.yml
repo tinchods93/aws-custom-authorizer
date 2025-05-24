@@ -3,8 +3,10 @@ authorizer:
   description: 'Custom Api Gateway Authorizer for Lambda functions'
   name: ${file(resources/index.json):functions.authorizer}
   timeout: 25
-  iamRoleStatementsInherit: true
-  iamRoleStatements: ${file(resources/iamRoleStatements/authorizer.yml)}
+  iamRoleStatementsInherit: true  
   provisionedConcurrency: ${self:custom.provisionedConcurrency.${self:provider.stage}, 0}
   environment:
     VALIDATE_SCOPE_FUNCTION_NAME: ${file(resources/index.json):externalFunctions.validateScope}
+    AUDIENCE: https://dev-hufol86imvvdceta.us.auth0.com/api/v2/
+    TOKEN_ISSUER: https://dev-hufol86imvvdceta.us.auth0.com
+    JWKS_URI: https://dev-hufol86imvvdceta.us.auth0.com/.well-known/jwks.json

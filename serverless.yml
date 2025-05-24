@@ -4,6 +4,7 @@ configValidationMode: off
 frameworkVersion: '>=3'
 
 custom:
+  config: ${file(config/index.js)}
   stackPrefix: ${self:service}-${self:provider.stage}
 
   tokenSecurityPrefix: aws-token-security-${self:provider.stage}
@@ -15,15 +16,6 @@ custom:
     staging: 2
     develop: 1
     number: 1
-
-  # developDomain: e1-api-protoprime.click
-  # prodDomain: api-protoprime.click
-
-  # customDomain:
-  #   domainName: ${self:custom.${self:provider.stage, 'develop'}Domain}
-  #   basePath: users-ms${env:developerStack, ''}
-  #   endpointType: 'regional'
-  #   apiType: http
 
 provider:
   name: aws
@@ -65,7 +57,6 @@ plugins:
 
 resources:
   - ${file(resources/outputs/outputs.yml)}
-  # - ${file(resources/authorizer/authorizer.yml)}
 
 functions:
   - ${file(src/authorizer.yml)}
