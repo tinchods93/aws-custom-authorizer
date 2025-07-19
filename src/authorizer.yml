@@ -1,6 +1,6 @@
 authorizer:
   handler: src/handlers/authorizer.handler
-  description: 'Custom Api Gateway Authorizer for Lambda functions'
+  description: 'Custom Api Gateway Authorizer for Lambda functions with CORS support'
   name: ${file(resources/index.json):functions.authorizer}
   timeout: 25
   iamRoleStatementsInherit: true  
