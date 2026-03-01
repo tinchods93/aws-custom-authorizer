@@ -96,7 +96,7 @@ SERVICE=aws-custom-authorizer
 REGION=us-east-1
 ACCOUNT_ID=123456789012
 LOG_LEVEL=DEBUG
-OWNER_PROJECT_NAME=Protoprime
+OWNER_PROJECT_NAME=Nodus
 ```
 
 ### **Dependencias Principales:**
@@ -392,7 +392,7 @@ npm test -- --coverage
 
 ### **Contacto:**
 - **Autor**: Martin dos Santos
-- **Proyecto**: Protoprime
+- **Proyecto**: Nodus
 - **Issues**: GitHub Issues del repositorio
 
 ### **Contribuir:**

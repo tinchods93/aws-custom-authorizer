@@ -6,7 +6,6 @@
   "scripts": {
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint --fix;",
-    "test:integration": "sh ./scripts/integration_test.sh",
     "deploy-prod": "sls deploy --stage prod",
     "deploy-dev": "sls deploy --stage develop",
     "remove-dev": "sls remove --stage develop",

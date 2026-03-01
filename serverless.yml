@@ -13,7 +13,6 @@ custom:
   prune:
     automatic: true
     prod: 3
-    staging: 2
     develop: 1
     number: 1
 
@@ -38,9 +37,9 @@ provider:
     SERVICE: ${self:service}
     REGION: ${self:provider.region}
     ACCOUNT_ID: ${self:provider.accountId}
-    LOG_LEVEL: DEBUG
+    LOG_LEVEL: INFO
     JWT_SECRET: 'test-secret'
-    OWNER_PROJECT_NAME: 'Protoprime'
+    OWNER_PROJECT_NAME: 'Nodus'
 
 package:
   individually: false
