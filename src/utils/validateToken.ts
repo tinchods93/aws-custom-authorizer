@@ -24,8 +24,6 @@ export default async function validateToken(
     }
   | false
 > {
-  console.log('MARTIN_LOG=> Validating token :', token);
-  console.log('MARTIN_LOG=> Method ARN :', methodArn);
   if (!token || !methodArn) {
     console.error('MARTIN_LOG=> Token or methodArn is missing');
     return false;
@@ -42,7 +40,6 @@ export default async function validateToken(
     console.error('MARTIN_LOG=> JWKS client not initialized');
     return false;
   }
-  console.log('MARTIN_LOG=> JWKS client initialized');
 
   const decodedToken = decodeToken(token);
 
@@ -50,13 +47,11 @@ export default async function validateToken(
     console.error('MARTIN_LOG=> Token decoding failed');
     return false;
   }
-  console.log('MARTIN_LOG=> Token decoded successfully');
   const getSigningKey = util.promisify(client.getSigningKey);
   if (!getSigningKey) {
     console.error('MARTIN_LOG=> getSigningKey function not available');
     return false;
   }
-  console.log('MARTIN_LOG=> getSigningKey function available');
   const jwtOptions = {}; // Ajusta según tus necesidades
 
   try {
@@ -75,7 +70,6 @@ export default async function validateToken(
     );
     // Verifica el token usando la clave pública
     const signingKey = key?.getPublicKey();
-    console.log('MARTIN_LOG=> Signing key retrieved successfully');
 
     if (!signingKey) {
       console.error('MARTIN_LOG=> Public key not found for signing key');
@@ -83,7 +77,6 @@ export default async function validateToken(
     }
 
     const decoded = jwt.verify(token, signingKey, jwtOptions) as any;
-    console.log('MARTIN_LOG=> Token verified successfully');
     return decoded && true;
   } catch (err) {
     console.error('MARTIN_LOG=> Token verification failed:', err);

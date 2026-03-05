@@ -8,13 +8,9 @@ export default class PolicyTemplate {
   }
 
   getPolicy(effect: PolicyEffectEnum, context?: Record<string, string>) {
-    console.log('MARTIN_LOG=> Generating policy for resource:', this.resource);
-    console.log('MARTIN_LOG=> Effect:', effect);
-    console.log('MARTIN_LOG=> Context:', context);
     // Create a more permissive resource pattern to allow all HTTP methods
     // This helps with CORS by allowing both the actual request and OPTIONS
     const baseResource = this.resource.replace(/\/([A-Z]+)\//, '/*/');
-    console.log('MARTIN_LOG=> Base resource:', baseResource);
 
     const policy: any = {
       principalId: 'user',
@@ -32,14 +28,11 @@ export default class PolicyTemplate {
         ],
       },
     };
-    console.log('MARTIN_LOG=> Policy generated:', policy);
 
     // Add context if provided
     if (context) {
-      console.log('MARTIN_LOG=> Adding context to policy:', context);
       policy.context = context;
     }
-    console.log('MARTIN_LOG=> Final policy:', policy);
 
     return policy;
   }
