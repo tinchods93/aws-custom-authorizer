@@ -3,7 +3,7 @@ import PolicyTemplate from '../utils/configs/policyTemplate';
 import validateToken from '../utils/validateToken';
 import { isOptionsRequest, extractHttpMethod } from '../utils/corsHelper';
 
-async function authorizerDomain(event, callback) {
+async function authorizerDomain(event) {
   const resource = event.methodArn;
   const Policy = new PolicyTemplate(resource);
 
@@ -21,9 +21,8 @@ async function authorizerDomain(event, callback) {
     //retrieve the token from the event
     let token = event.authorizationToken || event.headers?.Authorization;
     if (!token?.includes('Bearer ')) {
-      callback('Unauthorized');
       console.error('MARTIN_LOG=> Unauthorized: Invalid token format');
-      return Policy.getPolicy(PolicyEffectEnum.DENY);
+      throw new Error('Unauthorized');
     }
     token = token.replace('Bearer ', '').trim();
 
@@ -36,9 +35,8 @@ async function authorizerDomain(event, callback) {
     const tokenValidationResult = await validateToken(token, event.methodArn);
 
     if (!tokenValidationResult) {
-      callback('Unauthorized');
       console.error('MARTIN_LOG=> Unauthorized: Token validation failed');
-      return Policy.getPolicy(PolicyEffectEnum.DENY);
+      throw new Error('Unauthorized');
     }
 
     // return the response with context
@@ -50,9 +48,11 @@ async function authorizerDomain(event, callback) {
       corsEnabled: 'true',
     });
   } catch (error) {
+    if (error.message === 'Unauthorized') {
+      throw error;
+    }
     console.error('Authorization error:', error);
-    callback('Unauthorized');
-    return Policy.getPolicy(PolicyEffectEnum.DENY);
+    throw new Error('Unauthorized');
   }
 }
 

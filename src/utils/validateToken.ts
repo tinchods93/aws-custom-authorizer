@@ -64,10 +64,7 @@ export default async function validateToken(
       );
       throw new Error('Signing key not found');
     }
-    console.log(
-      'MARTIN_LOG=> Signing key found for kid:',
-      decodedToken.header.kid
-    );
+
     // Verifica el token usando la clave pública
     const signingKey = key?.getPublicKey();
 
