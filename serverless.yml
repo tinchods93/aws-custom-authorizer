@@ -18,7 +18,7 @@ custom:
 
 provider:
   name: aws
-  runtime: nodejs20.x
+  runtime: nodejs24.x
   architecture: arm64
   region: ${opt:region, 'us-east-1'}
   accountId: !Ref AWS::AccountId

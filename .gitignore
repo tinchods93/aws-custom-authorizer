@@ -21,6 +21,8 @@ scripts/get-credentials.js
 # Serverless
 admin.env
 .env
+.env.develop
+.env.prod
 _meta
 .serverless
 .dynamodb
