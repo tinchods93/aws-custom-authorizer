@@ -108,7 +108,7 @@ OWNER_PROJECT_NAME=Nodus
   "http-status-codes": "^2.3.0", // Códigos HTTP estándar
   "moment": "^2.30.1",           // Manejo de fechas
   "moment-timezone": "^0.5.45",  // Zonas horarias
-  "rebased": "^1.1.0"            // Invocación de Lambdas
+  "rebased": "^1.2.0"            // Invocación de Lambdas
 }
 ```
 
